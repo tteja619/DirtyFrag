@@ -144,13 +144,9 @@ public class MainActivity extends Activity implements IReporter {
                 if (t.matches("\\d+\\s*(\\u2026|\\.{3})?")) {
                     continue;
                 }
-                // Drop internal patch/hook details and raw result markers: the
-                // app renders its own SETUP/EXPLOIT/INIT/CLEANUP headers and
-                // synthesizes a single failure line instead of the raw one.
-                if (t.contains("hook=") || t.equals("ksud start: SUCCESS")
-                        || t.contains("ERROR - ")) {
-                    continue;
-                }
+                // Preserve native hook diagnostics and raw result markers in the
+                // saved run log. These messages are useful when hook or bootstrap
+                // stages fail and may not be available from Android logcat.
                 // Strip hex file offsets: ".../libc.so+0x6e8b0" -> ".../libc.so"
                 t = t.replaceAll("\\+0x[0-9a-fA-F]+$", "");
                 t = stripHeader(t);
